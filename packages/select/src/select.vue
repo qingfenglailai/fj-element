@@ -19,14 +19,25 @@
           disable-transitions>
           <span class="el-select__tags-text">{{ selected[0].currentLabel }}</span>
         </el-tag>
-        <el-tag
-          v-if="selected.length > 1"
-          :closable="false"
-          :size="collapseTagSize"
-          type="info"
-          disable-transitions>
-          <span class="el-select__tags-text" :title="selected.map((seletIiem)=>seletIiem.currentLabel) ">+ {{ selected.length - 1 }}</span>
+        <el-tooltip class="item">
+          <div slot="content">
+            <el-tag v-for="(tagItems, tagIndex) in selected.slice(1, selected.length)"
+                    :key="tagIndex"
+                    size="mini"
+                    :hit="true"
+                    :color="'#303133'"
+                    type="info"
+                    style="margin-right: 3px;">{{ tagItems.currentLabel }}</el-tag>
+          </div>
+          <el-tag
+              v-show="selected.length > 1"
+              :closable="false"
+              :size="collapseTagSize"
+              type="info" effect="plain"
+              disable-transitions>
+              <span class="el-select__tags-text">+ {{ selected.length - 1 }}</span>
         </el-tag>
+       </el-tooltip>
       </span>
       <transition-group @after-leave="resetInputHeight" v-if="!collapseTags">
         <el-tag
@@ -143,6 +154,7 @@
   import ElSelectMenu from './select-dropdown.vue';
   import ElOption from './option.vue';
   import ElTag from 'element-ui/packages/tag';
+  import ElTooltip from 'element-ui/packages/tooltip';
   import ElScrollbar from 'element-ui/packages/scrollbar';
   import debounce from 'throttle-debounce/debounce';
   import Clickoutside from 'element-ui/src/utils/clickoutside';
@@ -247,7 +259,8 @@
       ElSelectMenu,
       ElOption,
       ElTag,
-      ElScrollbar
+      ElScrollbar,
+      ElTooltip
     },
 
     directives: { Clickoutside },
